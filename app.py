@@ -6,11 +6,6 @@ import seaborn as sns
 from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 
-# Cargar los modelos entrenados
-model_f = joblib.load('model_f.pkl')
-model_failure_type = joblib.load('model_failure_type.pkl')
-model_cost = joblib.load('model_cost.pkl')
-
 # Cargar el dataset
 cleaned_combined_df = pd.read_csv('combined_df_dataset.csv')
 
@@ -23,15 +18,13 @@ from sklearn.model_selection import train_test_split
 # Realizar el train/test split
 X_train, X_test, y_train, y_test = train_test_split(X.drop(columns=['Asset Number']), y, test_size=0.3, random_state=42)
 
-# Realizar las predicciones
-y_pred_f = model_f.predict(X_test)
-y_pred_failure_type_encoded = model_failure_type.predict(X_test)
-y_pred_cost = model_cost.predict(X_test)
+# Load predictions from the CSV file
+df_predictions = pd.read_csv('predictions.csv')
 
-# Decodificar las predicciones para mostrar los tipos de fallas reales
-label_encoder = LabelEncoder()
-label_encoder.fit(cleaned_combined_df['Failure Code'])
-y_pred_failure_type = label_encoder.inverse_transform(y_pred_failure_type_encoded)
+# Extract the data and assign to variables
+y_pred_f = df_predictions['Predicted Time to Next Failure'].values
+y_pred_failure_type = df_predictions['Predicted Failure Type'].values
+y_pred_cost = df_predictions['Predicted Cost'].values
 
 # Crear el DataFrame de resultados incluyendo el nombre del activo
 df_results = X_test.copy()
