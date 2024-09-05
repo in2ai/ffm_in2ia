@@ -228,7 +228,7 @@ with tab1:
             st.pyplot(plt)
             plt.close(fig)
 
-        st.header("Time Taken to Complete Work Orders")
+        st.header("Time Taken to Complete")
         plot_time_taken_to_complete_work_orders(filtered_cm_work, filtered_pm_work)
 
     with col3:
